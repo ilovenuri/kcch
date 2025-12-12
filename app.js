@@ -52,7 +52,7 @@ const RIGHT_SCENES = [
   { type: "clock", duration: 6000 },
   {
     type: "text",
-    text: "항상 기뻐하라<br>쉬지말고 기도하라<br>범사에 감사하라 (살전 5:16–18)",
+    text: "항상 기뻐하라<br>쉬지말고 기도하라<br>범사에 감사하라<br>(살전 5:16–18)",
     duration: 6000
   },
   {
