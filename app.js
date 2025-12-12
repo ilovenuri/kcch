@@ -5,14 +5,12 @@ function fitToScreen() {
   const scaleX = window.innerWidth / 1920;
   const scaleY = window.innerHeight / 128;
   const scale = Math.min(scaleX, scaleY);
-
   document.querySelector(".app").style.transform = `scale(${scale})`;
 }
-
 window.addEventListener("resize", fitToScreen);
 
 /* ================================
-   CENTER CONFIG (weather 제거)
+   CENTER CONFIG
 ================================ */
 const CENTER_CONFIG = {
   tickerSpeedPxPerSec: 110,
@@ -30,17 +28,11 @@ const CENTER_CONFIG = {
     ],
     promo: [
       { icon: "🍜", text: "오늘 2교구 식당봉사입니다." },
-      {
-        icon: "🍜",
-        text: "점심식사 섬김이: 용화식 안수집사, 김옥경 권사 (용수정, 용환웅) 가정 | 박장우 장로, 최현숙 권사 가정"
-      },
+      { icon: "🍜", text: "점심식사 섬김이: 용화식 안수집사, 김옥경 권사 (용수정, 용환웅) 가정 | 박장우 장로, 최현숙 권사 가정" },
       { icon: "💐", text: "강단 꽃꽂이 섬김이: 강성환 안수집사, 김희자 권사 가정" },
-      {
-        icon: "🎶",
-        text: "주일 첫 시간을 하나님께 올려드리는 할렐루야 성가대 대원을 모집합니다. 안수집사와 장로로 구성되어 주일 1부 예배를 섬기는 할렐루야 성가대에 많은 관심과 지원을 부탁드립니다"
-      },
-      { icon: "📢", text: "식당봉사부 봉사자를 찾습니다. 많은 관심 부탁드립니다." },
-      { icon: "📢", text: "식후 식탁, 의자 정리 부탁드립니다. 감사합니다." }
+      { icon: "🎶", text: "주일 첫 시간을 하나님께 올려드리는 할렐루야 성가대 대원을 모집합니다." },
+      { icon: "📢", text: "식당봉사부 봉사자를 찾습니다." },
+      { icon: "📢", text: "식후 식탁, 의자 정리 부탁드립니다." }
     ]
   }
 };
@@ -50,23 +42,15 @@ const CENTER_CONFIG = {
 ================================ */
 const RIGHT_SCENES = [
   { type: "clock", duration: 6000 },
-  {
-    type: "text",
-    text: "항상 기뻐하라<br>쉬지말고 기도하라<br>범사에 감사하라<br>(살전 5:16–18)",
-    duration: 6000
-  },
-  {
-    type: "text",
-    text: "북한선교헌금<br>61,954,424원<br>(2025년 9월말 기준)",
-    duration: 6000
-  }
+  { type: "text", text: "항상 기뻐하라<br>쉬지말고 기도하라<br>범사에 감사하라<br>(살전 5:16–18)", duration: 6000 },
+  { type: "text", text: "북한선교헌금<br>61,954,424원<br>(2025년 9월말 기준)", duration: 6000 }
 ];
 
 /* ================================
    STATE
 ================================ */
-let centerSceneIndex = 0;
-const centerItemIndex = { image: 0, news: 0, promo: 0 };
+let sceneIndex = 0;
+let itemIndex = 0;
 let rightSceneIndex = 0;
 
 const centerRoot = document.getElementById("sceneRoot");
@@ -92,24 +76,19 @@ function startTicker(el) {
   if (distance <= 0) return;
 
   const duration = (distance / CENTER_CONFIG.tickerSpeedPxPerSec) * 1000;
-
   el.animate(
-    [
-      { transform: "translateX(0)" },
-      { transform: `translateX(-${distance}px)` }
-    ],
+    [{ transform: "translateX(0)" }, { transform: `translateX(-${distance}px)` }],
     { duration, easing: "linear", fill: "forwards" }
   );
 }
 
 /* ================================
-   CENTER RENDER
+   RENDER CENTER
 ================================ */
 function renderCenter(type, data) {
   if (type === "image") {
     return `<img src="${data.src}">`;
   }
-
   return `
     <span class="icon">${data.icon}</span>
     <div class="ticker-mask">
@@ -119,19 +98,17 @@ function renderCenter(type, data) {
 }
 
 /* ================================
-   CENTER LOOP
+   CENTER LOOP (🔥 FIXED)
 ================================ */
 function showCenter() {
-  const def = CENTER_CONFIG.rotation[centerSceneIndex];
-  const items = CENTER_CONFIG.data[def.type];
-  const idx = centerItemIndex[def.type];
-  const data = items[idx];
+  const scene = CENTER_CONFIG.rotation[sceneIndex];
+  const items = CENTER_CONFIG.data[scene.type];
+  const data = items[itemIndex];
 
   const old = centerRoot.querySelector(".scene");
   const next = document.createElement("div");
-
-  next.className = def.type === "image" ? "scene image" : "scene text";
-  next.innerHTML = renderCenter(def.type, data);
+  next.className = scene.type === "image" ? "scene image" : "scene text";
+  next.innerHTML = renderCenter(scene.type, data);
   centerRoot.appendChild(next);
 
   requestAnimationFrame(() => {
@@ -145,13 +122,14 @@ function showCenter() {
     setTimeout(() => old.remove(), 600);
   }
 
-  centerItemIndex[def.type]++;
-  if (centerItemIndex[def.type] >= items.length) {
-    centerItemIndex[def.type] = 0;
-    centerSceneIndex = (centerSceneIndex + 1) % CENTER_CONFIG.rotation.length;
+  // 🔥 핵심 수정 로직
+  itemIndex++;
+  if (itemIndex >= items.length) {
+    itemIndex = 0;
+    sceneIndex = (sceneIndex + 1) % CENTER_CONFIG.rotation.length;
   }
 
-  setTimeout(showCenter, def.duration);
+  setTimeout(showCenter, scene.duration);
 }
 
 /* ================================
