@@ -1,71 +1,68 @@
-/* =================================================
-   CENTER PANEL CONFIG
-================================================= */
+/* ================================
+   SCALE TO FIT (🔥 핵심)
+================================ */
+function fitToScreen() {
+  const scaleX = window.innerWidth / 1920;
+  const scaleY = window.innerHeight / 128;
+  const scale = Math.min(scaleX, scaleY);
+
+  document.querySelector(".app").style.transform =
+    `scale(${scale})`;
+}
+
+window.addEventListener("resize", fitToScreen);
+
+/* ================================
+   CENTER CONFIG
+================================ */
 const CENTER_CONFIG = {
-  rotation: {
-    scenes: [
-      { type: "image", durationMs: 13500 },
-      { type: "news", durationMs: 18000 },
-      { type: "weather", durationMs: 13500 },
-      { type: "promo", durationMs: 13500 }
-    ]
-  },
   tickerSpeedPxPerSec: 110,
+  rotation: [
+    { type: "image", duration: 13500 },
+    { type: "news", duration: 18000 },
+    { type: "weather", duration: 13500 },
+    { type: "promo", duration: 13500 }
+  ],
   data: {
     image: [
-      { src: "https://i.imgur.com/UW4WgXh.png", alt: "image announcement" }
+      { src: "https://i.imgur.com/UW4WgXh.png" }
     ],
     news: [
       { icon: "⛪", text: "오늘 설교 말씀: 거짓 빛은 사라지고, 참 빛이 오신다 (출22:18)" }
     ],
     promo: [
       { icon: "🍜", text: "오늘 2교구 식당봉사입니다." },
-      {
-        icon: "🍜",
-        text: "점심식사 섬김이: 용화식 안수집사, 김옥경 권사 (용수정, 용환웅) 가정 | 박장우 장로, 최현숙 권사 가정"
-      },
+      { icon: "🍜", text: "점심식사 섬김이: 용화식 안수집사, 김옥경 권사 (용수정, 용환웅) 가정 | 박장우 장로, 최현숙 권사 가정" },
       { icon: "💐", text: "강단 꽃꽂이 섬김이: 강성환 안수집사, 김희자 권사 가정" },
-      {
-        icon: "🎶",
-        text: "주일 첫 시간을 하나님께 올려드리는 할렐루야 성가대 대원을 모집합니다. 안수집사와 장로로 구성되어 주일 1부 예배를 섬기는 할렐루야 성가대에 많은 관심과 지원을 부탁드립니다"
-      },
-      { icon: "📢", text: "식당봉사부 봉사자를 찾습니다. 많은 관심 부탁드립니다." },
-      { icon: "📢", text: "식후 식탁, 의자 깨끗하게 정리정돈 부탁드립니다. 감사합니다." }
+      { icon: "🎶", text: "주일 첫 시간을 하나님께 올려드리는 할렐루야 성가대 대원을 모집합니다." },
+      { icon: "📢", text: "식당봉사부 봉사자를 찾습니다." },
+      { icon: "📢", text: "식후 식탁, 의자 정리 부탁드립니다." }
     ]
   }
 };
 
-/* =================================================
+/* ================================
    RIGHT PANEL CONFIG
-================================================= */
+================================ */
 const RIGHT_SCENES = [
-  { type: "clock", durationMs: 6000 },
-  {
-    type: "text",
-    text: "항상 기뻐하라<br>쉬지말고 기도하라<br>범사에 감사하라<br>(살전 5:16–18)",
-    durationMs: 6000
-  },
-  {
-    type: "text",
-    text: "북한선교헌금<br>61,954,424원<br>(2025년 9월말 기준)",
-    durationMs: 6000
-  }
+  { type: "clock", duration: 6000 },
+  { type: "text", text: "항상 기뻐하라 쉬지말고 기도하라 범사에 감사하라 (살전 5:16–18)", duration: 6000 },
+  { type: "text", text: "북한선교헌금  61,954,424원 (2025년 9월말 기준)", duration: 6000 }
 ];
 
-/* =================================================
+/* ================================
    STATE
-================================================= */
+================================ */
 let centerSceneIndex = 0;
 const centerItemIndex = { image: 0, news: 0, weather: 0, promo: 0 };
-
 let rightSceneIndex = 0;
 
 const centerRoot = document.getElementById("sceneRoot");
 const rightRoot = document.getElementById("rightSceneRoot");
 
-/* =================================================
-   UTILS
-================================================= */
+/* ================================
+   UTIL
+================================ */
 function getTime() {
   const d = new Date();
   return (
@@ -74,40 +71,28 @@ function getTime() {
   );
 }
 
-/* =================================================
-   TICKER (즉시 시작, 길이 기반 속도)
-================================================= */
-function applyTicker(el) {
+/* ================================
+   TICKER
+================================ */
+function startTicker(el) {
   const mask = el.closest(".ticker-mask");
-  if (!mask) return;
-
-  const textWidth = el.scrollWidth;
-  const maskWidth = mask.clientWidth;
-  const distance = Math.max(textWidth - maskWidth, 0);
-
+  const distance = el.scrollWidth - mask.clientWidth;
   if (distance <= 0) return;
 
-  const durationSec = distance / CENTER_CONFIG.tickerSpeedPxPerSec;
+  const duration = (distance / CENTER_CONFIG.tickerSpeedPxPerSec) * 1000;
 
   el.animate(
-    [
-      { transform: "translateX(0)" },
-      { transform: `translateX(-${distance}px)` }
-    ],
-    {
-      duration: durationSec * 1000,
-      easing: "linear",
-      fill: "forwards"
-    }
+    [{ transform: "translateX(0)" }, { transform: `translateX(-${distance}px)` }],
+    { duration, easing: "linear", fill: "forwards" }
   );
 }
 
-/* =================================================
+/* ================================
    CENTER RENDER
-================================================= */
+================================ */
 function renderCenter(type, data) {
   if (type === "image") {
-    return `<img src="${data.src}" alt="${data.alt || ""}">`;
+    return `<img src="${data.src}">`;
   }
 
   if (type === "news" || type === "promo") {
@@ -119,104 +104,80 @@ function renderCenter(type, data) {
     `;
   }
 
-  return `
-    <span class="icon">${data.icon}</span>
-    <span>${data.text}</span>
-  `;
+  return `<span class="icon">${data.icon}</span><span>${data.text}</span>`;
 }
 
-/* =================================================
+/* ================================
    CENTER TRANSITION
-================================================= */
-function transitionCenter(type, data) {
-  const oldScene = centerRoot.querySelector(".scene");
-  const newScene = document.createElement("div");
+================================ */
+function showCenter() {
+  const def = CENTER_CONFIG.rotation[centerSceneIndex];
+  const items = CENTER_CONFIG.data[def.type];
+  const idx = centerItemIndex[def.type];
+  const data = items[idx];
 
-  newScene.className = type === "image" ? "scene image" : "scene text";
-  newScene.innerHTML = renderCenter(type, data);
-  centerRoot.appendChild(newScene);
-
-  requestAnimationFrame(() => {
-    newScene.classList.add("fade-in");
-    const ticker = newScene.querySelector(".ticker-move");
-    if (ticker) applyTicker(ticker);
-  });
-
-  if (oldScene) {
-    oldScene.classList.remove("fade-in");
-    oldScene.classList.add("fade-out");
-    setTimeout(() => oldScene.remove(), 600);
-  }
-}
-
-/* =================================================
-   CENTER LOOP
-================================================= */
-function playCenter() {
-  const def = CENTER_CONFIG.rotation.scenes[centerSceneIndex];
-  const type = def.type;
-  const items = CENTER_CONFIG.data[type];
-  const idx = centerItemIndex[type];
-
-  transitionCenter(type, items[idx]);
-
-  centerItemIndex[type]++;
-
-  if (centerItemIndex[type] >= items.length) {
-    centerItemIndex[type] = 0;
-    centerSceneIndex = (centerSceneIndex + 1) % CENTER_CONFIG.rotation.scenes.length;
-  }
-
-  setTimeout(playCenter, def.durationMs);
-}
-
-/* =================================================
-   RIGHT TRANSITION
-================================================= */
-function transitionRight(scene) {
-  const old = rightRoot.querySelector(".right-scene");
+  const old = centerRoot.querySelector(".scene");
   const next = document.createElement("div");
 
-  next.className = "right-scene";
-
-  if (scene.type === "clock") {
-    next.innerHTML = `<div class="right-clock">${getTime()}</div>`;
-  } else {
-    next.innerHTML = `<div class="right-text">${scene.text}</div>`;
-  }
-
-  rightRoot.appendChild(next);
+  next.className = def.type === "image" ? "scene image" : "scene text";
+  next.innerHTML = renderCenter(def.type, data);
+  centerRoot.appendChild(next);
 
   requestAnimationFrame(() => {
     next.classList.add("fade-in");
+    const ticker = next.querySelector(".ticker-move");
+    if (ticker) startTicker(ticker);
   });
 
   if (old) {
-    old.classList.remove("fade-in");
     old.classList.add("fade-out");
     setTimeout(() => old.remove(), 600);
   }
+
+  centerItemIndex[def.type]++;
+  if (centerItemIndex[def.type] >= items.length) {
+    centerItemIndex[def.type] = 0;
+    centerSceneIndex = (centerSceneIndex + 1) % CENTER_CONFIG.rotation.length;
+  }
+
+  setTimeout(showCenter, def.duration);
 }
 
-/* =================================================
-   RIGHT LOOP
-================================================= */
-function playRight() {
+/* ================================
+   RIGHT PANEL
+================================ */
+function showRight() {
   const scene = RIGHT_SCENES[rightSceneIndex];
-  transitionRight(scene);
+
+  const old = rightRoot.querySelector(".right-scene");
+  const next = document.createElement("div");
+  next.className = "right-scene";
+
+  next.innerHTML =
+    scene.type === "clock"
+      ? `<div class="right-clock">${getTime()}</div>`
+      : `<div class="right-text">${scene.text}</div>`;
+
+  rightRoot.appendChild(next);
+  requestAnimationFrame(() => next.classList.add("fade-in"));
+
+  if (old) {
+    old.classList.add("fade-out");
+    setTimeout(() => old.remove(), 600);
+  }
 
   rightSceneIndex = (rightSceneIndex + 1) % RIGHT_SCENES.length;
-  setTimeout(playRight, scene.durationMs);
+  setTimeout(showRight, scene.duration);
 }
 
-/* =================================================
+/* ================================
    BOOT
-================================================= */
+================================ */
 function boot() {
-  playCenter();
-  playRight();
+  fitToScreen();
+  showCenter();
+  showRight();
 
-  // live clock update
   setInterval(() => {
     const clock = rightRoot.querySelector(".right-clock");
     if (clock) clock.textContent = getTime();

@@ -6,17 +6,20 @@ html, body {
   margin: 0;
   padding: 0;
   background: #ffffff;
+  overflow: hidden;
   font-family: "Noto Sans KR", system-ui, sans-serif;
 }
 
-/* APP */
+/* ================================
+   ROOT APP (1920 x 128 기준)
+================================ */
 .app {
   width: 1920px;
   height: 128px;
   position: relative;
   background: #ffffff;
   color: #0b1220;
-  overflow: hidden;
+  transform-origin: top left;
 }
 
 /* ================================
@@ -50,7 +53,7 @@ html, body {
   z-index: 10;
 }
 
-/* BACKGROUND (최하단) */
+/* RIGHT BACKGROUND */
 .right-bg {
   position: absolute;
   inset: 0;
@@ -61,16 +64,14 @@ html, body {
   z-index: 1;
 }
 
-/* SCENE ROOT */
+/* RIGHT SCENE ROOT */
 .right-scene-root {
   position: absolute;
   inset: 0;
   z-index: 2;
 }
 
-/* ================================
-   RIGHT SCENE (RIGHT ALIGN + 15px)
-================================ */
+/* RIGHT SCENE */
 .right-scene {
   position: absolute;
   inset: 0;
@@ -78,27 +79,27 @@ html, body {
   align-items: center;
   justify-content: flex-end;
   text-align: right;
-  padding: 12px 40px 12px 12px; /* 🔥 우측 여백 15px */
-  opacity: 0;
+  padding: 12px 15px 12px 12px;
   color: #ffffff;
   font-weight: 900;
+  opacity: 0;
 }
 
 /* CLOCK */
 .right-clock {
-  font-size: 48px;
+  font-size: 38px;
   letter-spacing: 1px;
   width: 100%;
 }
 
 /* TEXT */
 .right-text {
-  font-size: 22px;
+  font-size: 18px;
   line-height: 1.4;
   width: 100%;
 }
 
-/* FADE */
+/* RIGHT FADE */
 .right-scene.fade-in {
   opacity: 1;
   transition: opacity 600ms ease-in;
@@ -110,7 +111,7 @@ html, body {
 }
 
 /* ================================
-   CENTER CONTENT ROOT
+   CENTER CONTENT
 ================================ */
 .scene-root {
   position: absolute;
@@ -121,7 +122,7 @@ html, body {
   overflow: hidden;
 }
 
-/* CENTER SCENE */
+/* SCENE */
 .scene {
   position: absolute;
   inset: 0;
@@ -159,19 +160,13 @@ html, body {
 }
 
 /* IMAGE SCENE */
-.scene.image {
-  display: block;
-}
-
 .scene.image img {
-  position: absolute;
-  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: contain;
 }
 
-/* FADE (CENTER) */
+/* CENTER FADE */
 .scene.fade-in {
   opacity: 1;
   transition: opacity 600ms ease-in;
