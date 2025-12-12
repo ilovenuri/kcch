@@ -46,8 +46,8 @@ const CENTER_CONFIG = {
 ================================ */
 const RIGHT_SCENES = [
   { type: "clock", duration: 6000 },
-  { type: "text", text: "항상 기뻐하라 쉬지말고 기도하라 범사에 감사하라 (살전 5:16–18)", duration: 6000 },
-  { type: "text", text: "북한선교헌금  61,954,424원 (2025년 9월말 기준)", duration: 6000 }
+  { type: "text", text: "항상 기뻐하라<br>쉬지말고 기도하라<br>범사에 감사하라<br>(살전 5:16–18)", duration: 6000 },
+  { type: "text", text: "북한선교헌금<br>61,954,424원<br>(2025년 9월말 기준)", duration: 6000 }
 ];
 
 /* ================================
