@@ -79,7 +79,7 @@ html, body {
   align-items: center;
   justify-content: flex-end;
   text-align: right;
-  padding: 12px 15px 12px 12px;
+  padding: 12px 40px 12px 12px;
   color: #ffffff;
   font-weight: 900;
   opacity: 0;
@@ -87,14 +87,14 @@ html, body {
 
 /* CLOCK */
 .right-clock {
-  font-size: 38px;
+  font-size: 48px;
   letter-spacing: 1px;
   width: 100%;
 }
 
 /* TEXT */
 .right-text {
-  font-size: 18px;
+  font-size: 20px;
   line-height: 1.4;
   width: 100%;
 }
