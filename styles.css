@@ -1,6 +1,3 @@
-/* ================================
-   RESET
-================================ */
 * {
   box-sizing: border-box;
 }
@@ -14,19 +11,34 @@ html, body {
 }
 
 /* ================================
-   APP ROOT (1920 x 128)
+   VIEWPORT & SCALE
 ================================ */
-.app {
-  width: 2000px;
-  height: 128px;
+.viewport {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
   position: relative;
-  background: #ffffff;
-  color: #0b1220;
+}
+
+.scale-wrapper {
+  width: 1920px;
+  height: 128px;
   transform-origin: top left;
 }
 
 /* ================================
-   LEFT LOGO (311 x 128)
+   APP ROOT
+================================ */
+.app {
+  width: 1920px;
+  height: 128px;
+  position: relative;
+  background: #ffffff;
+  color: #0b1220;
+}
+
+/* ================================
+   LEFT LOGO
 ================================ */
 .left-logo {
   position: absolute;
@@ -44,7 +56,7 @@ html, body {
 }
 
 /* ================================
-   RIGHT PANEL (302 x 128)
+   RIGHT PANEL
 ================================ */
 .right-info {
   position: absolute;
@@ -52,31 +64,24 @@ html, body {
   top: 0;
   width: 302px;
   height: 128px;
-  overflow: hidden;
   z-index: 10;
+  overflow: hidden;
 }
 
-/* RIGHT PANEL BACKGROUND */
 .right-bg {
   position: absolute;
   inset: 0;
-  background-image: url("https://i.imgur.com/Nfl8zzu.png");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  background: url("https://i.imgur.com/MShjqGR.png") center/cover no-repeat;
   z-index: 1;
 }
 
-/* RIGHT PANEL SCENE ROOT */
 .right-scene-root {
   position: absolute;
   inset: 0;
   z-index: 2;
 }
 
-/* ================================
-   RIGHT SCENE (요청 반영)
-================================ */
+/* RIGHT SCENE */
 .right-scene {
   position: absolute;
   inset: 0;
@@ -90,21 +95,17 @@ html, body {
   opacity: 0;
 }
 
-/* CLOCK */
 .right-clock {
   font-size: 48px;
-  letter-spacing: 1px;
   width: 100%;
 }
 
-/* TEXT */
 .right-text {
   font-size: 20px;
   line-height: 1.4;
   width: 100%;
 }
 
-/* RIGHT FADE */
 .right-scene.fade-in {
   opacity: 1;
   transition: opacity 600ms ease-in;
@@ -116,7 +117,7 @@ html, body {
 }
 
 /* ================================
-   CENTER CONTENT ROOT
+   CENTER ROOT
 ================================ */
 .scene-root {
   position: absolute;
@@ -127,16 +128,13 @@ html, body {
   overflow: hidden;
 }
 
-/* ================================
-   COMMON CENTER SCENE
-================================ */
+/* CENTER SCENE */
 .scene {
   position: absolute;
   inset: 0;
   opacity: 0;
 }
 
-/* FADE */
 .scene.fade-in {
   opacity: 1;
   transition: opacity 600ms ease-in;
@@ -147,9 +145,7 @@ html, body {
   transition: opacity 500ms ease-out;
 }
 
-/* ================================
-   TEXT SCENE (NEWS / PROMO)
-================================ */
+/* TEXT SCENE */
 .scene.text {
   display: flex;
   align-items: center;
@@ -159,30 +155,22 @@ html, body {
   white-space: nowrap;
 }
 
-/* ICON */
 .icon {
-  flex: 0 0 48px;
   width: 48px;
   text-align: center;
 }
 
-/* TICKER */
 .ticker-mask {
-  flex: 1 1 auto;
-  min-width: 0;
+  flex: 1;
   overflow: hidden;
 }
 
 .ticker-move {
-  display: inline-block;
   white-space: nowrap;
-  will-change: transform;
+  display: inline-block;
 }
 
-/* ================================
-   IMAGE PERM / TEMP (CENTER FIT)
-   🔥 좌/우 패널 유지 + 가운데만 스케일
-================================ */
+/* IMAGE SCENE */
 .scene.image-perm,
 .scene.image-temp {
   display: flex;
@@ -194,7 +182,7 @@ html, body {
 .scene.image-temp img {
   max-width: 100%;
   max-height: 100%;
-  width: auto;          /* 🔥 핵심 */
-  height: auto;         /* 🔥 핵심 */
+  width: auto;
+  height: auto;
   object-fit: contain;
 }

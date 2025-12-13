@@ -1,16 +1,15 @@
 /* ================================
-   SCALE TO FIT
+   SCALE (가로 기준)
 ================================ */
 function fitToScreen() {
-  const scaleX = window.innerWidth / 1920;
-  const scaleY = window.innerHeight / 128;
-  const scale = Math.min(scaleX, scaleY);
-  document.querySelector(".app").style.transform = `scale(${scale})`;
+  const scale = window.innerWidth / 1920;
+  document.querySelector(".scale-wrapper").style.transform =
+    `scale(${scale})`;
 }
 window.addEventListener("resize", fitToScreen);
 
 /* ================================
-   CENTER CONFIG
+   CONFIG
 ================================ */
 const CENTER_CONFIG = {
   tickerSpeedPxPerSec: 110,
@@ -25,34 +24,17 @@ const CENTER_CONFIG = {
       { src: "https://i.imgur.com/UW4WgXh.png" }
     ],
     image_temp: [
-      {
-        src: "https://i.imgur.com/s94GpXs.png",
-        bgColor: "#317b61"
-      }
+      { src: "https://i.imgur.com/s94GpXs.png", bgColor: "#317b61" }
     ],
     news: [
       { icon: "⛪", text: "오늘 설교 말씀: 거짓 빛은 사라지고, 참 빛이 오신다 (출22:18)" }
     ],
     promo: [
-      { icon: "🍜", text: "오늘 2교구 식당봉사입니다." },
-      {
-        icon: "🍜",
-        text: "점심식사 섬김이: 용화식 안수집사, 김옥경 권사 (용수정, 용환웅) 가정 | 박장우 장로, 최현숙 권사 가정"
-      },
-      { icon: "💐", text: "강단 꽃꽂이 섬김이: 강성환 안수집사, 김희자 권사 가정" },
-      {
-        icon: "🎶",
-        text: "주일 첫 시간을 하나님께 올려드리는 할렐루야 성가대 대원을 모집합니다."
-      },
-      { icon: "📢", text: "식당봉사부 봉사자를 찾습니다." },
-      { icon: "📢", text: "식후 식탁, 의자 정리 부탁드립니다." }
+      { icon: "🍜", text: "점심식사 섬김이: 용화식 안수집사, 김옥경 권사 가정" }
     ]
   }
 };
 
-/* ================================
-   RIGHT PANEL CONFIG
-================================ */
 const RIGHT_SCENES = [
   { type: "clock", duration: 6000 },
   {
@@ -72,21 +54,18 @@ const RIGHT_SCENES = [
 ================================ */
 let sceneIndex = 0;
 let itemIndex = 0;
-let rightSceneIndex = 0;
+let rightIndex = 0;
 
+const appEl = document.querySelector(".app");
 const centerRoot = document.getElementById("sceneRoot");
 const rightRoot = document.getElementById("rightSceneRoot");
-const appEl = document.querySelector(".app");
 
 /* ================================
    UTIL
 ================================ */
 function getTime() {
   const d = new Date();
-  return (
-    String(d.getHours()).padStart(2, "0") + ":" +
-    String(d.getMinutes()).padStart(2, "0")
-  );
+  return `${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;
 }
 
 /* ================================
@@ -94,15 +73,12 @@ function getTime() {
 ================================ */
 function startTicker(el) {
   const mask = el.closest(".ticker-mask");
-  const distance = el.scrollWidth - mask.clientWidth;
-  if (distance <= 0) return;
+  const dist = el.scrollWidth - mask.clientWidth;
+  if (dist <= 0) return;
 
-  const duration = (distance / CENTER_CONFIG.tickerSpeedPxPerSec) * 1000;
+  const duration = (dist / CENTER_CONFIG.tickerSpeedPxPerSec) * 1000;
   el.animate(
-    [
-      { transform: "translateX(0)" },
-      { transform: `translateX(-${distance}px)` }
-    ],
+    [{ transform: "translateX(0)" }, { transform: `translateX(-${dist}px)` }],
     { duration, easing: "linear", fill: "forwards" }
   );
 }
@@ -124,19 +100,15 @@ function renderCenter(type, data) {
 }
 
 /* ================================
-   CENTER LOOP (🔥 전체 배경 처리)
+   CENTER LOOP
 ================================ */
 function showCenter() {
   const scene = CENTER_CONFIG.rotation[sceneIndex];
   const items = CENTER_CONFIG.data[scene.type];
   const data = items[itemIndex];
 
-  /* 🔥 전체 배경색 제어 */
-  if (scene.type === "image_temp" && data.bgColor) {
-    appEl.style.backgroundColor = data.bgColor;
-  } else {
-    appEl.style.backgroundColor = "#ffffff";
-  }
+  appEl.style.backgroundColor =
+    scene.type === "image_temp" && data.bgColor ? data.bgColor : "#ffffff";
 
   const old = centerRoot.querySelector(".scene");
   const next = document.createElement("div");
@@ -172,10 +144,10 @@ function showCenter() {
 }
 
 /* ================================
-   RIGHT PANEL LOOP
+   RIGHT LOOP
 ================================ */
 function showRight() {
-  const scene = RIGHT_SCENES[rightSceneIndex];
+  const scene = RIGHT_SCENES[rightIndex];
 
   const old = rightRoot.querySelector(".right-scene");
   const next = document.createElement("div");
@@ -194,7 +166,7 @@ function showRight() {
     setTimeout(() => old.remove(), 600);
   }
 
-  rightSceneIndex = (rightSceneIndex + 1) % RIGHT_SCENES.length;
+  rightIndex = (rightIndex + 1) % RIGHT_SCENES.length;
   setTimeout(showRight, scene.duration);
 }
 
