@@ -1,3 +1,6 @@
+/* ================================
+   RESET
+================================ */
 * {
   box-sizing: border-box;
 }
@@ -11,7 +14,7 @@ html, body {
 }
 
 /* ================================
-   ROOT APP (1920 x 128 기준)
+   APP ROOT (1920 x 128)
 ================================ */
 .app {
   width: 1920px;
@@ -53,25 +56,27 @@ html, body {
   z-index: 10;
 }
 
-/* RIGHT BACKGROUND */
+/* RIGHT PANEL BACKGROUND */
 .right-bg {
   position: absolute;
   inset: 0;
-  background-image: url("https://i.imgur.com/Nfl8zzu.png");
+  background-image: url("https://i.imgur.com/MShjqGR.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   z-index: 1;
 }
 
-/* RIGHT SCENE ROOT */
+/* RIGHT PANEL SCENE ROOT */
 .right-scene-root {
   position: absolute;
   inset: 0;
   z-index: 2;
 }
 
-/* RIGHT SCENE */
+/* ================================
+   RIGHT SCENE (요청 반영)
+================================ */
 .right-scene {
   position: absolute;
   inset: 0;
@@ -111,7 +116,7 @@ html, body {
 }
 
 /* ================================
-   CENTER CONTENT
+   CENTER CONTENT ROOT
 ================================ */
 .scene-root {
   position: absolute;
@@ -122,14 +127,29 @@ html, body {
   overflow: hidden;
 }
 
-/* SCENE */
+/* ================================
+   COMMON CENTER SCENE
+================================ */
 .scene {
   position: absolute;
   inset: 0;
   opacity: 0;
 }
 
-/* TEXT SCENE */
+/* FADE */
+.scene.fade-in {
+  opacity: 1;
+  transition: opacity 600ms ease-in;
+}
+
+.scene.fade-out {
+  opacity: 0;
+  transition: opacity 500ms ease-out;
+}
+
+/* ================================
+   TEXT SCENE (NEWS / PROMO)
+================================ */
 .scene.text {
   display: flex;
   align-items: center;
@@ -159,20 +179,22 @@ html, body {
   will-change: transform;
 }
 
-/* IMAGE SCENE */
-.scene.image img {
-  width: 100%;
-  height: 100%;
+/* ================================
+   IMAGE PERM / TEMP (CENTER FIT)
+   🔥 좌/우 패널 유지 + 가운데만 스케일
+================================ */
+.scene.image-perm,
+.scene.image-temp {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.scene.image-perm img,
+.scene.image-temp img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;          /* 🔥 핵심 */
+  height: auto;         /* 🔥 핵심 */
   object-fit: contain;
-}
-
-/* CENTER FADE */
-.scene.fade-in {
-  opacity: 1;
-  transition: opacity 600ms ease-in;
-}
-
-.scene.fade-out {
-  opacity: 0;
-  transition: opacity 500ms ease-out;
 }
