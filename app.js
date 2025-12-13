@@ -27,7 +27,7 @@ const CENTER_CONFIG = {
     image_temp: [
       {
         src: "https://i.imgur.com/s94GpXs.png",
-        bgColor: "#317b61"   // 🔥 임시 이미지 배경색
+        bgColor: "#317b61"
       }
     ],
     news: [
@@ -42,7 +42,7 @@ const CENTER_CONFIG = {
       { icon: "💐", text: "강단 꽃꽂이 섬김이: 강성환 안수집사, 김희자 권사 가정" },
       {
         icon: "🎶",
-        text: "주일 첫 시간을 하나님께  올려드리는 할렐루야  성가대 대원을 모집합니다. 안수집사와 장로로 구성되어 주일 1부 예배를 섬기는 할렐루야 성가대에 많은 관심과 지원을 부탁드립니다."
+        text: "주일 첫 시간을 하나님께 올려드리는 할렐루야 성가대 대원을 모집합니다."
       },
       { icon: "📢", text: "식당봉사부 봉사자를 찾습니다." },
       { icon: "📢", text: "식후 식탁, 의자 정리 부탁드립니다." }
@@ -76,6 +76,7 @@ let rightSceneIndex = 0;
 
 const centerRoot = document.getElementById("sceneRoot");
 const rightRoot = document.getElementById("rightSceneRoot");
+const appEl = document.querySelector(".app");
 
 /* ================================
    UTIL
@@ -123,12 +124,19 @@ function renderCenter(type, data) {
 }
 
 /* ================================
-   CENTER LOOP
+   CENTER LOOP (🔥 전체 배경 처리)
 ================================ */
 function showCenter() {
   const scene = CENTER_CONFIG.rotation[sceneIndex];
   const items = CENTER_CONFIG.data[scene.type];
   const data = items[itemIndex];
+
+  /* 🔥 전체 배경색 제어 */
+  if (scene.type === "image_temp" && data.bgColor) {
+    appEl.style.backgroundColor = data.bgColor;
+  } else {
+    appEl.style.backgroundColor = "#ffffff";
+  }
 
   const old = centerRoot.querySelector(".scene");
   const next = document.createElement("div");
@@ -139,10 +147,6 @@ function showCenter() {
       : scene.type === "image_temp"
       ? "scene image-temp"
       : "scene text";
-
-  if (scene.type === "image_temp" && data.bgColor) {
-    next.style.backgroundColor = data.bgColor;
-  }
 
   next.innerHTML = renderCenter(scene.type, data);
   centerRoot.appendChild(next);
