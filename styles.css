@@ -17,7 +17,7 @@ html, body {
    APP ROOT (1920 x 128)
 ================================ */
 .app {
-  width: 1920px;
+  width: 2000px;
   height: 128px;
   position: relative;
   background: #ffffff;
